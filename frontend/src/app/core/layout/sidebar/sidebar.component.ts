@@ -16,7 +16,6 @@ export class SidebarComponent implements OnInit {
   pushRightClass: string;
 
   user: User;
-
   @Output() collapsedEvent = new EventEmitter<boolean>();
 
   constructor(
