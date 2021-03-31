@@ -52,7 +52,7 @@ declare const __non_webpack_require__: NodeRequire;
 const mainModule = __non_webpack_require__.main;
 const moduleFilename = (mainModule && mainModule.filename) || "";
 if (moduleFilename === __filename || moduleFilename.includes("iisnode")) {
-  const port = process.env.PORT || 4000;
+  const port = process.env.PORT || 4200;
 
   // Start up the Node server
   const server = app();
