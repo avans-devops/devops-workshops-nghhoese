@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  frontend:
+    image: frontend
+    ports:
+      - "4200:4200"
+    networks:
+      - netwerk2
+  backend:
+    image: api
+    ports:
+      - "3000:3000"
+    networks:
+      - netwerk2
+    environment:
+      - host=db
+      - db_username=username
+      - db_password=UnhAckablePassword
+      - params=?authSource=admin
+  db:
+    image: mongo
+    networks:
+      - netwerk2
+    environment:
+      - MONGO_INITDB_DATABASE=Connections
+      - MONGO_INITDB_ROOT_USERNAME=username
+      - MONGO_INITDB_ROOT_PASSWORD=UnhAckablePassword
+    volumes:
+      - ./mongo-volume:/data/db
+networks:
+  netwerk2:
