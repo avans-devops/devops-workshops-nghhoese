@@ -12,8 +12,18 @@ const expressJwt = require('express-jwt');
 // Import Mongoose
 const mongoose = require('mongoose');
 
+const promBundle = require('express-prom-bundle');
 const environment = require('./config/environment');
 
+const metricsMiddleware = promBundle({
+    includePath: true,
+    includeStatusCode: true,
+    normalizePath: true,
+    promClient: {
+        collectDefaultMetrics: {}
+    }
+});
+app.use(metricsMiddleware);
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

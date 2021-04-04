@@ -2,15 +2,15 @@ version: '3.9'
 
 services:
   frontend:
-    image: frontend
+    build: ./frontend
     ports:
       - "4200:4200"
     networks:
       - netwerk2
   backend:
-    image: api
+    build: ./api
     ports:
-      - "3000:3000"
+      - "5000:5000"
     networks:
       - netwerk2
     environment:
@@ -18,6 +18,42 @@ services:
       - db_username=username
       - db_password=UnhAckablePassword
       - params=?authSource=admin
+      - EXPRESS_PORT=5000
+  db-exporter:
+    image: bitnami/mongodb-exporter:0.11
+    environment:
+      - MONGODB_URI=mongodb://db:27017
+    restart: always
+    ports: 
+      - 9216:9216
+    networks:
+      - netwerk2
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus-data:/prometheus
+    ports:
+      - 9090:9090
+    command: --web.enable-lifecycle --config.file=/etc/prometheus/prometheus.yml
+    depends_on:
+      - db
+      - backend
+      - frontend
+    networks:
+      - netwerk2
+
+  grafana:
+    build: ./grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    networks:
+      - netwerk2
   db:
     image: mongo
     networks:
@@ -28,5 +64,8 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=UnhAckablePassword
     volumes:
       - ./mongo-volume:/data/db
+volumes:
+  prometheus-data:
+
 networks:
   netwerk2:
