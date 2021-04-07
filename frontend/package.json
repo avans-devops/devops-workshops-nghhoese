@@ -13,6 +13,7 @@
     "serve:ssr": "node dist/frontend/server/main.js",
     "build:ssr": "ng build --prod && ng run frontend:server:production",
     "build:output": "npm run build:ssr --output-path=dist",
+    "build:prod": "ng build --prod",
     "prerender": "ng run frontend:prerender",
     "dev-server": "concurrently \"nodemon ../api/server.js --watch api\" \"npm run serve\""
   },
